@@ -5,6 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chat with Crimson — Pullman Rotary</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Retell chat widget — must be in <head> -->
+  <script
+    id="retell-widget"
+    src="https://dashboard.retellai.com/retell-widget-v2.js"
+    type="module"
+    data-public-key="public_key_1c43701efd96c10e8b609"
+    data-agent-id="agent_973368620db848031a468ff65b"
+    data-title="Crimson — Pullman Rotary"
+    data-bot-name="Crimson"
+    data-color="#1A5276"
+    data-fab-text="Chat with Crimson"
+    data-popup-message="Hi! I can answer questions about Pullman Rotary. How can I help?"
+    data-show-ai-popup="true"
+    data-show-ai-popup-time="3"
+    data-auto-open="false"
+  ></script>
+
   <style>
     :root {
       --navy: #1A3A5C;
@@ -12,15 +30,13 @@
       --gold: #C9A84C;
       --cream: #F9F6EF;
       --white: #FFFFFF;
-      --gray: #6B7280;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
       width: 100%;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100vh;
       background: var(--cream);
       font-family: 'Outfit', sans-serif;
     }
@@ -36,74 +52,68 @@
       z-index: 0;
     }
 
-    .wrapper {
+    .page {
       position: relative;
       z-index: 1;
-      width: 100%;
-      height: 100%;
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
     }
 
+    /* Header */
     .header {
       background: var(--navy);
-      padding: 14px 24px;
+      padding: 16px 28px;
       display: flex;
       align-items: center;
-      gap: 14px;
-      flex-shrink: 0;
-      box-shadow: 0 2px 12px rgba(14,26,20,0.15);
+      gap: 16px;
+      box-shadow: 0 2px 16px rgba(14,26,20,0.18);
     }
 
     .header-logo {
-      width: 36px;
-      height: 36px;
-      background: rgba(201,168,76,0.15);
-      border: 1px solid rgba(201,168,76,0.35);
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
 
-    .rotary-wheel {
-      width: 22px;
-      height: 22px;
-    }
-
     .header-text h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 600;
       color: var(--white);
       line-height: 1.1;
-      letter-spacing: 0.01em;
     }
 
     .header-text p {
       font-size: 11px;
       font-weight: 300;
-      color: rgba(255,255,255,0.45);
-      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.04em;
+      margin-top: 2px;
     }
 
     .header-badge {
       margin-left: auto;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       font-size: 10px;
       font-weight: 500;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--gold);
-      opacity: 0.8;
+      opacity: 0.85;
     }
 
     .online-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       background: #22C55E;
       border-radius: 50%;
       animation: pulse 2s infinite;
@@ -111,65 +121,141 @@
 
     @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      50% { opacity: 0.35; }
     }
 
-    .chat-container {
+    /* Hero content area */
+    .hero {
       flex: 1;
-      overflow: hidden;
-      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      text-align: center;
     }
 
+    .hero-icon {
+      width: 72px;
+      height: 72px;
+      background: rgba(26,58,92,0.08);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+    }
+
+    .hero h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 300;
+      color: var(--navy);
+      line-height: 1.15;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h2 em {
+      font-style: italic;
+      color: var(--blue);
+    }
+
+    .hero p {
+      font-size: 16px;
+      font-weight: 300;
+      color: #6B7280;
+      max-width: 480px;
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 14px 32px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      border-bottom: 3px solid var(--gold);
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-cta:hover {
+      background: var(--blue);
+      transform: translateY(-1px);
+    }
+
+    .hero-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 40px;
+      max-width: 560px;
+    }
+
+    .topic-pill {
+      background: rgba(26,58,92,0.06);
+      border: 1px solid rgba(26,58,92,0.12);
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 400;
+      padding: 7px 16px;
+      border-radius: 100px;
+      opacity: 0.8;
+    }
+
+    /* Footer */
     .footer {
       background: var(--navy);
-      padding: 8px 24px;
+      padding: 10px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-shrink: 0;
       border-top: 1px solid rgba(201,168,76,0.1);
     }
 
-    .footer-left {
+    .footer span {
       font-size: 10px;
-      color: rgba(255,255,255,0.25);
-      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.22);
+      letter-spacing: 0.04em;
     }
 
-    .footer-right {
-      font-size: 10px;
-      color: rgba(255,255,255,0.2);
-      letter-spacing: 0.05em;
-    }
-
-    .footer-right a {
-      color: rgba(201,168,76,0.5);
+    .footer a {
+      color: rgba(201,168,76,0.45);
       text-decoration: none;
+      transition: color 0.2s;
     }
 
-    .footer-right a:hover {
-      color: var(--gold);
-    }
+    .footer a:hover { color: var(--gold); }
   </style>
 </head>
 <body>
 
-  <div class="wrapper">
+  <div class="page">
 
     <div class="header">
       <div class="header-logo">
-        <svg class="rotary-wheel" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="45" stroke="#C9A84C" stroke-width="6" fill="none"/>
-          <circle cx="50" cy="50" r="28" stroke="#C9A84C" stroke-width="5" fill="none"/>
-          <circle cx="50" cy="50" r="10" fill="#C9A84C"/>
-          <line x1="50" y1="22" x2="50" y2="40" stroke="#C9A84C" stroke-width="5" stroke-linecap="round"/>
-          <line x1="50" y1="60" x2="50" y2="78" stroke="#C9A84C" stroke-width="5" stroke-linecap="round"/>
-          <line x1="22" y1="50" x2="40" y2="50" stroke="#C9A84C" stroke-width="5" stroke-linecap="round"/>
-          <line x1="60" y1="50" x2="78" y2="50" stroke="#C9A84C" stroke-width="5" stroke-linecap="round"/>
-          <line x1="33" y1="33" x2="44" y2="44" stroke="#C9A84C" stroke-width="5" stroke-linecap="round"/>
-          <line x1="56" y1="56" x2="67" y2="67" stroke="#C9A84C" stroke-width="5" stroke-linecap="round"/>
-          <line x1="67" y1="33" x2="56" y2="44" stroke="#C9A84C" stroke-width="5" stroke-linecap="round"/>
-          <line x1="44" y1="56" x2="33" y2="67" stroke="#C9A84C" stroke-width="5" stroke-linecap="round"/>
+        <svg width="24" height="24" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="45" stroke="#C9A84C" stroke-width="7" fill="none"/>
+          <circle cx="50" cy="50" r="27" stroke="#C9A84C" stroke-width="6" fill="none"/>
+          <circle cx="50" cy="50" r="9" fill="#C9A84C"/>
+          <line x1="50" y1="23" x2="50" y2="41" stroke="#C9A84C" stroke-width="6" stroke-linecap="round"/>
+          <line x1="50" y1="59" x2="50" y2="77" stroke="#C9A84C" stroke-width="6" stroke-linecap="round"/>
+          <line x1="23" y1="50" x2="41" y2="50" stroke="#C9A84C" stroke-width="6" stroke-linecap="round"/>
+          <line x1="59" y1="50" x2="77" y2="50" stroke="#C9A84C" stroke-width="6" stroke-linecap="round"/>
+          <line x1="33" y1="33" x2="44" y2="44" stroke="#C9A84C" stroke-width="6" stroke-linecap="round"/>
+          <line x1="56" y1="56" x2="67" y2="67" stroke="#C9A84C" stroke-width="6" stroke-linecap="round"/>
+          <line x1="67" y1="33" x2="56" y2="44" stroke="#C9A84C" stroke-width="6" stroke-linecap="round"/>
+          <line x1="44" y1="56" x2="33" y2="67" stroke="#C9A84C" stroke-width="6" stroke-linecap="round"/>
         </svg>
       </div>
       <div class="header-text">
@@ -182,26 +268,41 @@
       </div>
     </div>
 
-    <div class="chat-container" id="retell-widget-container"></div>
+    <div class="hero">
+      <div class="hero-icon">
+        <svg width="36" height="36" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="45" stroke="#1A5276" stroke-width="7" fill="none"/>
+          <circle cx="50" cy="50" r="27" stroke="#1A5276" stroke-width="6" fill="none"/>
+          <circle cx="50" cy="50" r="9" fill="#1A5276"/>
+          <line x1="50" y1="23" x2="50" y2="41" stroke="#1A5276" stroke-width="6" stroke-linecap="round"/>
+          <line x1="50" y1="59" x2="50" y2="77" stroke="#1A5276" stroke-width="6" stroke-linecap="round"/>
+          <line x1="23" y1="50" x2="41" y2="50" stroke="#1A5276" stroke-width="6" stroke-linecap="round"/>
+          <line x1="59" y1="50" x2="77" y2="50" stroke="#1A5276" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2>Ask <em>Crimson</em> anything<br />about Pullman Rotary.</h2>
+      <p>Crimson is the AI assistant for the Rotary Club of Pullman. Get instant answers about meetings, membership, grants, events, and more — any time of day.</p>
+      <button class="hero-cta" onclick="document.querySelector('#retell-widget')?.click?.(); window.RetellWebClient?.open?.();">
+        💬 &nbsp;Start a Conversation
+      </button>
+      <div class="hero-topics">
+        <span class="topic-pill">Meeting times & location</span>
+        <span class="topic-pill">How to join Rotary</span>
+        <span class="topic-pill">Membership dues</span>
+        <span class="topic-pill">Irving M. Field Grant</span>
+        <span class="topic-pill">Memorial Fountain Project</span>
+        <span class="topic-pill">Leave a message</span>
+        <span class="topic-pill">Youth programs</span>
+        <span class="topic-pill">District 5080</span>
+      </div>
+    </div>
 
     <div class="footer">
-      <span class="footer-left">pullmanrotary.org &nbsp;·&nbsp; RotaryPullman@gmail.com</span>
-      <span class="footer-right">Powered by <a href="https://talltowndesigns.com" target="_blank">Tall Town Design</a></span>
+      <span>pullmanrotary.org &nbsp;·&nbsp; RotaryPullman@gmail.com</span>
+      <span>Powered by <a href="https://talltowndesigns.com" target="_blank">Tall Town Design</a></span>
     </div>
 
   </div>
-
-  <script
-    src="https://cdn.retellai.com/retell-widget-v2.js"
-    type="module"
-    data-public-key="YOUR_RETELL_PUBLIC_KEY_HERE"
-    data-agent-id="YOUR_CHAT_AGENT_ID_HERE"
-    data-title="Crimson — Pullman Rotary"
-    data-bot-name="Crimson"
-    data-color="#1A5276"
-    data-open-on-load="true"
-    data-show-ai-popup="false"
-  ></script>
 
 </body>
 </html>
