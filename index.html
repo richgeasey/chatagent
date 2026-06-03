@@ -6,7 +6,7 @@
   <title>Chat with Crimson — Pullman Rotary</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
 
-  <!-- Retell chat widget — must be in <head> -->
+  <!-- Retell chat widget -->
   <script
     id="retell-widget"
     src="https://dashboard.retellai.com/retell-widget-v2.js"
@@ -60,7 +60,6 @@
       min-height: 100vh;
     }
 
-    /* Header */
     .header {
       background: var(--navy);
       padding: 16px 28px;
@@ -124,7 +123,6 @@
       50% { opacity: 0.35; }
     }
 
-    /* Hero content area */
     .hero {
       flex: 1;
       display: flex;
@@ -168,29 +166,33 @@
       color: #6B7280;
       max-width: 480px;
       line-height: 1.8;
-      margin-bottom: 40px;
+      margin-bottom: 16px;
     }
 
-    .hero-cta {
-      display: inline-flex;
+    /* Arrow pointing down to the widget bubble */
+    .arrow-hint {
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      background: var(--navy);
-      color: var(--white);
-      font-size: 14px;
-      font-weight: 500;
-      padding: 14px 32px;
-      border-radius: 100px;
-      border: none;
-      cursor: pointer;
-      border-bottom: 3px solid var(--gold);
-      transition: background 0.2s, transform 0.15s;
+      gap: 8px;
+      margin-top: 32px;
+      opacity: 0.6;
+    }
+
+    .arrow-hint span {
+      font-size: 13px;
+      color: var(--navy);
+      font-weight: 400;
       letter-spacing: 0.02em;
     }
 
-    .hero-cta:hover {
-      background: var(--blue);
-      transform: translateY(-1px);
+    .arrow-hint svg {
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
     }
 
     .hero-topics {
@@ -210,10 +212,15 @@
       font-weight: 400;
       padding: 7px 16px;
       border-radius: 100px;
-      opacity: 0.8;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
     }
 
-    /* Footer */
+    .topic-pill:hover {
+      background: rgba(26,58,92,0.12);
+      border-color: rgba(26,58,92,0.25);
+    }
+
     .footer {
       background: var(--navy);
       padding: 10px 28px;
@@ -282,18 +289,25 @@
       </div>
       <h2>Ask <em>Crimson</em> anything<br />about Pullman Rotary.</h2>
       <p>Crimson is the AI assistant for the Rotary Club of Pullman. Get instant answers about meetings, membership, grants, events, and more — any time of day.</p>
-      <button class="hero-cta" onclick="document.querySelector('#retell-widget')?.click?.(); window.RetellWebClient?.open?.();">
-        💬 &nbsp;Start a Conversation
-      </button>
+      <p style="font-size:14px; color: var(--blue); font-weight:500;">Click the chat bubble in the bottom right corner to get started.</p>
+
+      <div class="arrow-hint">
+        <span>Chat with Crimson</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A5276" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <polyline points="19 12 12 19 5 12"/>
+        </svg>
+      </div>
+
       <div class="hero-topics">
-        <span class="topic-pill">Meeting times & location</span>
-        <span class="topic-pill">How to join Rotary</span>
-        <span class="topic-pill">Membership dues</span>
-        <span class="topic-pill">Irving M. Field Grant</span>
-        <span class="topic-pill">Memorial Fountain Project</span>
-        <span class="topic-pill">Leave a message</span>
-        <span class="topic-pill">Youth programs</span>
-        <span class="topic-pill">District 5080</span>
+        <span class="topic-pill" onclick="openWidget()">Meeting times & location</span>
+        <span class="topic-pill" onclick="openWidget()">How to join Rotary</span>
+        <span class="topic-pill" onclick="openWidget()">Membership dues</span>
+        <span class="topic-pill" onclick="openWidget()">Irving M. Field Grant</span>
+        <span class="topic-pill" onclick="openWidget()">Memorial Fountain Project</span>
+        <span class="topic-pill" onclick="openWidget()">Leave a message</span>
+        <span class="topic-pill" onclick="openWidget()">Youth programs</span>
+        <span class="topic-pill" onclick="openWidget()">District 5080</span>
       </div>
     </div>
 
@@ -303,6 +317,48 @@
     </div>
 
   </div>
+
+  <script>
+    // Try to click the Retell FAB button programmatically
+    function openWidget() {
+      // Retell renders a button — find it by looking for their shadow DOM or button element
+      const tryClick = () => {
+        // Try direct button query first
+        const btn = document.querySelector('button[class*="retell"], div[class*="retell"] button, #retell-widget-fab, [data-retell-fab]');
+        if (btn) {
+          btn.click();
+          return true;
+        }
+        // Try finding any fixed-position button in the bottom right (the FAB)
+        const allButtons = document.querySelectorAll('button');
+        for (const b of allButtons) {
+          const style = window.getComputedStyle(b);
+          if (style.position === 'fixed') {
+            b.click();
+            return true;
+          }
+        }
+        return false;
+      };
+
+      // Try immediately, then retry after short delays
+      if (!tryClick()) {
+        setTimeout(() => { if (!tryClick()) { setTimeout(tryClick, 500); } }, 200);
+      }
+    }
+
+    // Auto-attempt to find and observe when widget loads
+    window.addEventListener('load', () => {
+      // Give the module script time to initialize
+      setTimeout(() => {
+        const fab = document.querySelector('button');
+        if (fab) {
+          // Widget is ready — the topic pills will work
+          console.log('Retell widget ready');
+        }
+      }, 2000);
+    });
+  </script>
 
 </body>
 </html>
